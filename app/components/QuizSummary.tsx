@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -37,18 +37,7 @@ export default function QuizSummary({
 
   const percentage = Math.round((score / totalQuestions) * 100);
 
-  useEffect(() => {
-    if (percentage >= 70) {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-      });
-    }
-    fetchLeaderboard();
-  }, [percentage]);
-
-  const fetchLeaderboard = async () => {
+  const fetchLeaderboard = useCallback(async () => {
     try {
       const response = await fetch(`/api/leaderboard?category=${category}`);
       if (response.ok) {
@@ -58,7 +47,18 @@ export default function QuizSummary({
     } catch (error) {
       console.error("Error fetching leaderboard:", error);
     }
-  };
+  }, [category]);
+
+  useEffect(() => {
+    if (percentage >= 70) {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+    }
+    fetchLeaderboard();
+  }, [percentage, fetchLeaderboard]);
 
   const submitScore = async () => {
     if (name.trim() === "") return;

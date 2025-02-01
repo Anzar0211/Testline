@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import type { Question, QuizCategory } from "../types/quiz";
 import StartQuiz from "./StartQuiz";
@@ -38,11 +38,16 @@ export default function QuizContainer() {
     };
   }, [quizStarted, quizEnded, timeRemaining]);
 
+  const endQuiz = useCallback(() => {
+    setQuizEnded(true);
+    setTimeTaken(QUIZ_TIME_LIMIT - timeRemaining);
+  }, [timeRemaining]);
+
   useEffect(() => {
     if (timeRemaining === 0 && !quizEnded) {
       endQuiz();
     }
-  }, [timeRemaining, quizEnded]);
+  }, [timeRemaining, quizEnded, endQuiz]);
 
   const fetchQuizData = async (category: QuizCategory) => {
     setLoading(true);
@@ -119,11 +124,6 @@ export default function QuizContainer() {
     setTimeTaken(0);
 
     router.replace("/");
-  };
-
-  const endQuiz = () => {
-    setQuizEnded(true);
-    setTimeTaken(QUIZ_TIME_LIMIT - timeRemaining);
   };
 
   const restartQuiz = async () => {

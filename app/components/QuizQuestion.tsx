@@ -52,7 +52,7 @@ export default function QuizQuestion({
   };
 
   const answers = Object.entries(question.answers).filter(
-    ([_, value]) => value !== null
+    ([, value]) => value !== null
   );
   const progress = (currentQuestion / totalQuestions) * 100;
 
@@ -121,7 +121,6 @@ export default function QuizQuestion({
         </CardContent>
         <CardFooter className="flex justify-between pt-6">
           <div className="flex gap-2">
-            {/* Previous Question Button */}
             <Button
               onClick={onPrevious}
               disabled={currentQuestion === 1}
@@ -131,7 +130,7 @@ export default function QuizQuestion({
             >
               Previous
             </Button>
-            {/* Next Question Button */}
+
             <Button
               onClick={onNext}
               disabled={currentQuestion === totalQuestions}
@@ -143,7 +142,6 @@ export default function QuizQuestion({
             </Button>
           </div>
           <div className="flex gap-2">
-            {/* End Test Button */}
             <Button
               onClick={onLeave}
               variant="destructive"
@@ -152,7 +150,7 @@ export default function QuizQuestion({
             >
               End Test
             </Button>
-            {/* Submit Answer Button */}
+
             <Button
               onClick={handleSubmit}
               disabled={Object.keys(selectedAnswers).length === 0}
